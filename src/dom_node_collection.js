@@ -7,6 +7,29 @@ class DOMNodeCollection {
         this.nodes.forEach(cb);
     }
 
+    on(eventName, callback) {
+        this.each((node) => {
+            node.addEventListener(eventName, callback);
+            const eventKey = `jqliteEvents-${eventName}`;
+            if (typeof node[eventKey] === "undefined") {
+                node[eventKey] = [];
+            }
+            node[eventKey].push(callback);
+        });
+    }
+
+    off(eventName) {
+        this.each((node) => {
+            const eventKey = `jqliteEvents-${eventName}`;
+            if (node[eventKey]) {
+                node[eventKey].forEach((callback) => {
+                    node.removeEventListener(eventName, callback);
+                });
+            }
+            node[eventKey] = [];
+        });
+    }
+
     html(html) {
         if (typeof html === "string") {
             this.each((node) => {
@@ -66,7 +89,7 @@ class DOMNodeCollection {
         this.each(node => node.classList.toggle(toggleClass));
     }
 
-    find() {
+    find(selector) {
         let foundNodes = [];
         this.each((node) => {
             const nodeList = node.querySelectorAll(selector);
