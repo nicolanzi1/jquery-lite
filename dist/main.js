@@ -104,7 +104,7 @@ eval("class DOMNodeCollection {\n    constructor (nodes) {\n        this.nodes =
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const DOMNodeCollection = __webpack_require__(/*! ./dom_node_collection */ \"./src/dom_node_collection.js\");\n\nconst addToWindow = (arg) => {\n    window.$l\n}\n\n//# sourceURL=webpack:///./src/index.js?");
+eval("const DOMNodeCollection = __webpack_require__(/*! ./dom_node_collection */ \"./src/dom_node_collection.js\");\n\nconst _docReadyCallBacks = [];\nlet _docReady = false;\n\nwindow.$l = (arg) => {\n    switch (typeof arg) {\n        case \"function\":\n            return registerDocReadyCallback(arg);\n        case \"string\":\n            return getNodesFromDom(arg);\n        case \"object\":\n            if (arg instanceof HTMLElement) {\n                return new DOMNodeCollection([arg]);\n            }\n    }\n};\n\nregisterDocReadyCallback = (func) => {\n    if (!_docReady) {\n        _docReadyCallBacks.push(func);\n    } else {\n        func();\n    }\n};\n\ngetNodesFromDom = (selector) => {\n    const nodes = document.querySelectorAll(selector);\n    const nodesArray = Array.from(nodes);\n    return new DOMNodeCollection(nodesArray);\n};\n\ndocument.addEventListener('DOMContentLoaded', () => {\n    _docReady = true;\n    _docReadyCallBacks.forEach(func => func());\n});\n\n//# sourceURL=webpack:///./src/index.js?");
 
 /***/ })
 
