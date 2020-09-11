@@ -86,14 +86,25 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/dom_node_collection.js":
+/*!************************************!*\
+  !*** ./src/dom_node_collection.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("class DOMNodeCollection {\n    constructor (nodes) {\n        this.nodes = nodes;\n    }\n\n    each(cb) {\n        this.nodes.forEach(cb);\n    }\n\n    html(html) {\n        if (typeof html === \"string\") {\n            this.each((node) => {\n                node.innerHTML = html\n            });\n        } else if (this.nodes.length > 0) {\n            return this.nodes[0].innerHTML;\n        }\n    }\n\n    empty() {\n        this.html('');\n    }\n\n    append(children) {\n        if (this.nodes.lenght === 0) return;\n\n        if (typeof children === 'object' &&\n        !(children instanceof DOMNodeCollection)) {\n            children = $l(children);\n        }\n\n        if (typeof children === \"string\") {\n            this.each((node) => {\n                node.innerHTML += children;\n            });\n        } else if (children instanceof DOMNodeCollection) {\n            this.each((node) => {\n                children.each((childNode) => {\n                    node.appendChild(childNode.cloneNode(true));\n                });\n            });\n        }\n    }\n\n    remove() {\n        this.each(node => node.parentNode.removeChild(node));\n    }\n\n    attr(key, val) {\n        if (typeof val === \"string\") {\n            this.each(node => node.setAttribute(key, val));\n        } else {\n            return this.nodes[0].getAttribute(key);\n        }\n    }\n\n    addClass(newClass) {\n        this.each(node => node.classList.add(newClass));\n    }\n\n    removeClass(oldClass) {\n        this.each(node => node.classList.remove(oldClass));\n    }\n\n    toggleClass(toggleClass) {\n        this.each(node => node.classList.toggle(toggleClass));\n    }\n\n    find() {\n        let foundNodes = [];\n        this.each((node) => {\n            const nodeList = node.querySelectorAll(selector);\n            foundNodes = foundNodes.concat(Array.from(nodeList));\n        });\n        return new DOMNodeCollection(foundNodes);\n    }\n\n    children() {\n        let childNodes = [];\n        this.each((node) => {\n            const childNodeList = node.children;\n            childNodes = childNodes.concat(Array.from(childNodeList));\n        });\n        return new DOMNodeCollection(childNodes);\n    }\n\n    parent() {\n        let parentNodes = []\n\n        this.each(({ parentNode }) => {\n            if (!parentNode.visited) {\n                parentNodes.push(parenNode);\n                parentNode.visited = true;\n            }\n        });\n\n        parentNodes.forEach((node) => {\n            node.visited = false;\n        });\n        return new DOMNodeCollection(parentNodes);\n    }\n}\n\nmodule.exports = DOMNodeCollection;\n\n//# sourceURL=webpack:///./src/dom_node_collection.js?");
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-eval("const addToWindow = (arg) => {\n    window.$1\n}\n\n//# sourceURL=webpack:///./src/index.js?");
+eval("const DOMNodeCollection = __webpack_require__(/*! ./dom_node_collection */ \"./src/dom_node_collection.js\");\n\nconst addToWindow = (arg) => {\n    window.$l\n}\n\n//# sourceURL=webpack:///./src/index.js?");
 
 /***/ })
 
